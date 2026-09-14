@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using SimpleECommerceAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    // /scalar/v1
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
