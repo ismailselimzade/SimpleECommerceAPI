@@ -39,7 +39,7 @@ namespace SimpleECommerceAPI.Services
         {
             if (await _db.Categories.AnyAsync(c => c.Name == dto.Name))
             {
-                throw new DuplicateResourceException($"A category with the name '{dto.Name}' already exists.");
+                throw new DuplicateResourceException("Category", "name", dto.Name);
             }
 
             Category category = new() { Name = dto.Name };
@@ -57,7 +57,7 @@ namespace SimpleECommerceAPI.Services
             {
                 if (await _db.Categories.AnyAsync(c => c.Name == dto.Name && c.Id != id))
                 {
-                    throw new DuplicateResourceException($"A category with the name '{dto.Name}' already exists.");
+                    throw new DuplicateResourceException("Category", "name", dto.Name);
                 }
 
                 category.Name = dto.Name;
@@ -77,7 +77,7 @@ namespace SimpleECommerceAPI.Services
             {
                 if (await _db.Products.AnyAsync(p => p.CategoryId == id))
                 {
-                    throw new CategoryInUseException($"Category with id '{id}' cannot be deleted because it has associated products.");
+                    throw new InUseException("Category", id.ToString());
                 }
 
                 _db.Categories.Remove(category);

@@ -2,9 +2,7 @@
 {
     public class DuplicateResourceException : Exception
     {
-        public DuplicateResourceException(string message) : base(message)
-        {
-            
-        }
+        public DuplicateResourceException(string entityName, string fieldName, string fieldValue) : base($"{entityName} with {fieldName} '{fieldValue}' already exists")
+        {}
     }
 }

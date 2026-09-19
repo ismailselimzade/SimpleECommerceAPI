@@ -31,7 +31,7 @@ namespace SimpleECommerceAPI.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost] // ? frombody
         public async Task<ActionResult<CategoryResponseDto>> CreateCategory([FromBody] CategoryDto dto)
         {
             try
@@ -68,7 +68,7 @@ namespace SimpleECommerceAPI.Controllers
 
                 return result ? NoContent() : NotFound();
             }
-            catch(CategoryInUseException ex)
+            catch(InUseException ex)
             {
                 return Conflict(ex.Message);
             }
