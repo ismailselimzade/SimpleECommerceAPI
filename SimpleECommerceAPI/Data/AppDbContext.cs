@@ -12,6 +12,7 @@ namespace SimpleECommerceAPI.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -24,6 +25,10 @@ namespace SimpleECommerceAPI.Data
                 .HasOne(cart => cart.User)
                 .WithOne(user => user.Cart)
                 .HasForeignKey<Cart>(cart => cart.UserId);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(refreshToken => refreshToken.User)
+                .WithMany(user => user.RefreshTokens);
 
             modelBuilder.Entity<Order>()
                 .HasOne(order => order.User)

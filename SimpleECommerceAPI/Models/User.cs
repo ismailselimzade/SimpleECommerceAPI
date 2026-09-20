@@ -7,6 +7,7 @@ namespace SimpleECommerceAPI.Models
         public User()
         {
             Orders = new HashSet<Order>();
+            RefreshTokens = new HashSet<RefreshToken>();
         }
         public Guid Id { get; set; }
 
@@ -18,5 +19,6 @@ namespace SimpleECommerceAPI.Models
 
         public Cart Cart { get; set; }
         public ICollection<Order> Orders { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }
