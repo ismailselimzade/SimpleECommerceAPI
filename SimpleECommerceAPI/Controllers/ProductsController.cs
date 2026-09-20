@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimpleECommerceAPI.Common;
 using SimpleECommerceAPI.Dtos.Product;
 using SimpleECommerceAPI.Exceptions;
+using SimpleECommerceAPI.QueryParameters;
 using SimpleECommerceAPI.Services;
 
 namespace SimpleECommerceAPI.Controllers
@@ -16,9 +18,9 @@ namespace SimpleECommerceAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductResponseDto>>> GetAllProducts()
+        public async Task<ActionResult<PagedResult<ProductResponseDto>>> GetAllProducts([FromQuery] ProductQueryParameters queryParameters)
         {
-            return Ok(await _productService.GetAllProductsAsync());
+            return Ok(await _productService.GetAllProductsAsync(queryParameters));
         }
 
         [HttpGet("{id}")]

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SimpleECommerceAPI.Common;
 using SimpleECommerceAPI.Data;
 using SimpleECommerceAPI.Dtos.Product;
 using SimpleECommerceAPI.Exceptions;
 using SimpleECommerceAPI.Models;
+using SimpleECommerceAPI.QueryParameters;
 
 namespace SimpleECommerceAPI.Services
 {
@@ -14,10 +16,31 @@ namespace SimpleECommerceAPI.Services
             _db = db;
         }
 
-        public async Task<List<ProductResponseDto>> GetAllProductsAsync()
+        public async Task<PagedResult<ProductResponseDto>> GetAllProductsAsync(ProductQueryParameters queryParameters)
         {
-            List<ProductResponseDto> products = await _db.Products
-                .Include(p => p.Category)
+            IQueryable<Product> query = _db.Products.Include(p => p.Category);
+
+            if (queryParameters.CategoryId != null)
+            {
+                query = query.Where(p => p.CategoryId == queryParameters.CategoryId);
+            }
+            if (queryParameters.MinPrice != null)
+            {
+                query = query.Where(p => p.Price >= queryParameters.MinPrice);
+            }
+            if (queryParameters.MaxPrice != null)
+            {
+                query = query.Where(p => p.Price <= queryParameters.MaxPrice);
+            }
+            if (queryParameters.SearchTerm != null)
+            {
+                query = query.Where(p => p.Name.Contains(queryParameters.SearchTerm));
+            }
+
+            int totalCount = await query.CountAsync();
+            query = query.Skip((queryParameters.Page - 1) * queryParameters.PageSize).Take(queryParameters.PageSize);
+
+            var items = await query
                 .Select(p => new ProductResponseDto
                 (
                     p.Id, p.CategoryId, p.Name, p.Category.Name, p.Description,
@@ -25,7 +48,16 @@ namespace SimpleECommerceAPI.Services
                 ))
                 .ToListAsync();
 
-            return products;
+            PagedResult<ProductResponseDto> result = new()
+            {
+                Items = items,
+                Page = queryParameters.Page,
+                PageSize = queryParameters.PageSize,
+                TotalCount = totalCount
+            };
+
+
+            return result;
         }
 
         public async Task<ProductResponseDto?> GetProductByIdAsync(Guid productId)
