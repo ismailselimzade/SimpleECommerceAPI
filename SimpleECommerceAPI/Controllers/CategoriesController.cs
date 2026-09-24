@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SimpleECommerceAPI.Dtos.Category;
 using SimpleECommerceAPI.Exceptions;
@@ -8,6 +9,7 @@ namespace SimpleECommerceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -17,12 +19,14 @@ namespace SimpleECommerceAPI.Controllers
             _categoryService = categoryService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<CategoryResponseDto>>> GetAllCategories()
         {
             return Ok(await _categoryService.GetAllCategoriesAsync());
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryResponseDto>> GetCategoryById(Guid id)
         {
@@ -31,8 +35,9 @@ namespace SimpleECommerceAPI.Controllers
             return result == null ? NotFound() : Ok(result);
         }
 
-        [HttpPost] // ? frombody
-        public async Task<ActionResult<CategoryResponseDto>> CreateCategory([FromBody] CategoryDto dto)
+        
+        [HttpPost]
+        public async Task<ActionResult<CategoryResponseDto>> CreateCategory(CategoryDto dto)
         {
             try
             {
@@ -46,7 +51,7 @@ namespace SimpleECommerceAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CategoryResponseDto>> UpdateCategory(Guid id, [FromBody] CategoryDto dto)
+        public async Task<ActionResult<CategoryResponseDto>> UpdateCategory(Guid id, CategoryDto dto)
         {
             try
             {

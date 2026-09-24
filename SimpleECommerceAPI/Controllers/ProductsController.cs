@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleECommerceAPI.Common;
 using SimpleECommerceAPI.Dtos.Product;
 using SimpleECommerceAPI.Exceptions;
@@ -9,6 +10,7 @@ namespace SimpleECommerceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -17,12 +19,14 @@ namespace SimpleECommerceAPI.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<PagedResult<ProductResponseDto>>> GetAllProducts([FromQuery] ProductQueryParameters queryParameters)
         {
             return Ok(await _productService.GetAllProductsAsync(queryParameters));
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductResponseDto>> GetProductById(Guid id)
         {
