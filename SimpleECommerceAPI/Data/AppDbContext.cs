@@ -24,19 +24,23 @@ namespace SimpleECommerceAPI.Data
             modelBuilder.Entity<Cart>()
                 .HasOne(cart => cart.User)
                 .WithOne(user => user.Cart)
-                .HasForeignKey<Cart>(cart => cart.UserId);
+                .HasForeignKey<Cart>(cart => cart.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RefreshToken>()
                 .HasOne(refreshToken => refreshToken.User)
-                .WithMany(user => user.RefreshTokens);
+                .WithMany(user => user.RefreshTokens)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Order>()
                 .HasOne(order => order.User)
-                .WithMany(user => user.Orders);
+                .WithMany(user => user.Orders)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(cartItem => cartItem.Product)
-                .WithMany(product => product.CartItems);
+                .WithMany(product => product.CartItems)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(orderItem => orderItem.Product)
@@ -45,11 +49,13 @@ namespace SimpleECommerceAPI.Data
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(cartItem => cartItem.Cart)
-                .WithMany(cart => cart.CartItems);
+                .WithMany(cart => cart.CartItems)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(orderItem => orderItem.Order)
-                .WithMany(order => order.OrderItems);
+                .WithMany(order => order.OrderItems)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Product>()
                 .HasOne(product => product.Category)
