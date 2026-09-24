@@ -1,4 +1,6 @@
-﻿namespace SimpleECommerceAPI.Dtos.Category
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SimpleECommerceAPI.Dtos.Category
 {
-    public record CategoryDto(string Name);
+    public record CategoryDto([Required(AllowEmptyStrings = false)][MaxLength(100)] string Name);
 }

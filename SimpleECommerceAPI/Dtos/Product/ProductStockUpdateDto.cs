@@ -2,5 +2,5 @@
 
 namespace SimpleECommerceAPI.Dtos.Product
 {
-    public record ProductStockUpdateDto([Range(0, int.MaxValue)]int NewStock);
+    public record ProductStockUpdateDto([Required] [Range(0, int.MaxValue)]int NewStock);
 }
