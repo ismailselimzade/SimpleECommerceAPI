@@ -40,12 +40,12 @@ namespace SimpleECommerceAPI.Data
             modelBuilder.Entity<CartItem>()
                 .HasOne(cartItem => cartItem.Product)
                 .WithMany(product => product.CartItems)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(orderItem => orderItem.Product)
                 .WithMany(product => product.OrderItems)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(cartItem => cartItem.Cart)
@@ -65,6 +65,34 @@ namespace SimpleECommerceAPI.Data
             modelBuilder.Entity<Category>()
                 .HasIndex(category => category.Name)
                 .IsUnique();
+
+            modelBuilder.Entity<CartItem>()
+                .HasIndex(cartItem => new {cartItem.CartId, cartItem.ProductId})
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(user => user.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(user => user.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(refreshToken => refreshToken.TokenHash)
+                .IsUnique();
+
+            modelBuilder.Entity<Product>()
+                .Property(product => product.Price)
+                .HasPrecision(16, 2);
+
+            modelBuilder.Entity<Order>()
+                .Property(order => order.TotalAmount)
+                .HasPrecision(16, 2);
+
+            modelBuilder.Entity<OrderItem>()
+                .Property(orderItem => orderItem.UnitPrice)
+                .HasPrecision(16, 2);
         }
     }
 }
