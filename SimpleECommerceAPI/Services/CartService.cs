@@ -88,6 +88,10 @@ namespace SimpleECommerceAPI.Services
 
             if (cartItem != null)
             {
+                if (product.Stock < cartItemAddDto.Quantity)
+                {
+                    return null;
+                }
                 cartItem.Quantity += cartItemAddDto.Quantity;
 
                 await _db.SaveChangesAsync();

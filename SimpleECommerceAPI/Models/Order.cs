@@ -12,6 +12,7 @@ namespace SimpleECommerceAPI.Models
         public Guid UserId { get; set; }
         public decimal TotalAmount { get; set; }
         public Status Status { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
         public DateTime CreatedAt { get; set; }
         public User User { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
