@@ -10,9 +10,11 @@ namespace SimpleECommerceAPI.Services
     public class OrderService : IOrderService
     {
         private readonly AppDbContext _db;
-        public OrderService(AppDbContext appDbContext)
+        private readonly IPaymentService _paymentService;
+        public OrderService(AppDbContext appDbContext, IPaymentService paymentService)
         {
             _db = appDbContext;
+            _paymentService = paymentService;
         }
 
         public async Task<OrderResponseDto> CreateOrderAsync(Guid userId, OrderCreateDto orderCreateDto)
@@ -35,6 +37,7 @@ namespace SimpleECommerceAPI.Services
                 PaymentMethod = orderCreateDto.PaymentMethod
             };
 
+
             foreach (var cartItem in cart.CartItems)
             {
                 OrderItem orderItem = new()
@@ -56,9 +59,12 @@ namespace SimpleECommerceAPI.Services
                 order.TotalAmount += orderItem.UnitPrice * orderItem.Quantity;
             }
 
+            await _paymentService.CreatePaymentAsync(order.TotalAmount, "usd");
+
             _db.Orders.Add(order);
 
             _db.Carts.Remove(cart);
+
 
             await _db.SaveChangesAsync();
 
