@@ -1,7 +1,7 @@
 # Simple E-Commerce API
 
-A RESTful e-commerce API with authentication, cart, orders, and payment integration.  
-Autentifikasiya, səbət, sifariş və ödəniş inteqrasiyası olan RESTful e-ticarət API-si.
+A RESTful API with authentication, cart, orders, and payment integration.  
+Autentifikasiya, səbət, sifariş və ödəniş inteqrasiyası olan RESTful API-si.
 
 ---
 
