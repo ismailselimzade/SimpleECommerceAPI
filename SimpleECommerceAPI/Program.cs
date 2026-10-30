@@ -81,13 +81,22 @@ try
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
+    Console.WriteLine("--> [DIAGNOSTIC] Admin seeding block reached.");
+
     if (await db.Database.CanConnectAsync())
     {
-        if (!await db.Users.AnyAsync(u => u.UserRole == UserRole.Admin))
+        Console.WriteLine("--> [DIAGNOSTIC] Database connection successful.");
+
+        var hasAdmin = await db.Users.AnyAsync(u => u.UserRole == UserRole.Admin);
+        Console.WriteLine($"--> [DIAGNOSTIC] Does admin exist? {hasAdmin}");
+
+        if (!hasAdmin)
         {
             var username = configuration["SeedAdmin:Username"] ?? configuration["SeedAdmin__Username"];
             var email = configuration["SeedAdmin:Email"] ?? configuration["SeedAdmin__Email"];
             var passwordHash = configuration["SeedAdmin:PasswordHash"] ?? configuration["SeedAdmin__PasswordHash"];
+
+            Console.WriteLine($"--> [DIAGNOSTIC] Username: '{username}', Email: '{email}', PasswordHash is null: {passwordHash == null}");
 
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(passwordHash))
             {
@@ -102,18 +111,22 @@ try
 
                 db.Users.Add(admin);
                 await db.SaveChangesAsync();
-                Console.WriteLine("--> Admin user successfully created from environment variables.");
+                Console.WriteLine("--> [DIAGNOSTIC] Admin user successfully created!");
             }
             else
             {
-                Console.WriteLine("--> SeedAdmin configuration values are missing in environment variables.");
+                Console.WriteLine("--> [DIAGNOSTIC] Configuration values are missing!");
             }
         }
+    }
+    else
+    {
+        Console.WriteLine("--> [DIAGNOSTIC] Cannot connect to database.");
     }
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"--> An error occurred during admin seeding: {ex.Message}");
+    Console.WriteLine($"--> [DIAGNOSTIC ERROR]: {ex.Message}");
 }
 
 
