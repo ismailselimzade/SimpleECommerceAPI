@@ -85,13 +85,11 @@ try
     {
         if (!await db.Users.AnyAsync(u => u.UserRole == UserRole.Admin))
         {
-            var section = configuration.GetSection("SeedAdmin");
+            var username = configuration["SeedAdmin:Username"] ?? configuration["SeedAdmin__Username"];
+            var email = configuration["SeedAdmin:Email"] ?? configuration["SeedAdmin__Email"];
+            var passwordHash = configuration["SeedAdmin:PasswordHash"] ?? configuration["SeedAdmin__PasswordHash"];
 
-            var username = section["Username"];
-            var email = section["Email"];
-            var passwordHash = section["PasswordHash"];
-
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email))
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(passwordHash))
             {
                 var admin = new User()
                 {
@@ -104,11 +102,11 @@ try
 
                 db.Users.Add(admin);
                 await db.SaveChangesAsync();
-                Console.WriteLine("--> Admin user successfully created.");
+                Console.WriteLine("--> Admin user successfully created from environment variables.");
             }
             else
             {
-                Console.WriteLine("--> SeedAdmin configuration values are missing or null.");
+                Console.WriteLine("--> SeedAdmin configuration values are missing in environment variables.");
             }
         }
     }
