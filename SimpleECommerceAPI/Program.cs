@@ -78,55 +78,29 @@ app.MapControllers();
 try
 {
     using var scope = app.Services.CreateScope();
+
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-    Console.WriteLine("--> [DIAGNOSTIC] Admin seeding block reached.");
-
-    if (await db.Database.CanConnectAsync())
+    if (!await db.Users.AnyAsync(u => u.UserRole == UserRole.Admin))
     {
-        Console.WriteLine("--> [DIAGNOSTIC] Database connection successful.");
-
-        var hasAdmin = await db.Users.AnyAsync(u => u.UserRole == UserRole.Admin);
-        Console.WriteLine($"--> [DIAGNOSTIC] Does admin exist? {hasAdmin}");
-
-        if (!hasAdmin)
+        var section = configuration.GetSection("SeedAdmin");
+        var admin = new User()
         {
-            var username = configuration["SeedAdmin:Username"] ?? configuration["SeedAdmin__Username"];
-            var email = configuration["SeedAdmin:Email"] ?? configuration["SeedAdmin__Email"];
-            var passwordHash = configuration["SeedAdmin:PasswordHash"] ?? configuration["SeedAdmin__PasswordHash"];
+            Username = section["Username"],
+            Email = section["Email"],
+            PasswordHash = section["PasswordHash"],
+            UserRole = UserRole.Admin,
+            CreatedAt = DateTime.UtcNow,
+        };
 
-            Console.WriteLine($"--> [DIAGNOSTIC] Username: '{username}', Email: '{email}', PasswordHash is null: {passwordHash == null}");
-
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(passwordHash))
-            {
-                var admin = new User()
-                {
-                    Username = username,
-                    Email = email,
-                    PasswordHash = passwordHash,
-                    UserRole = UserRole.Admin,
-                    CreatedAt = DateTime.UtcNow,
-                };
-
-                db.Users.Add(admin);
-                await db.SaveChangesAsync();
-                Console.WriteLine("--> [DIAGNOSTIC] Admin user successfully created!");
-            }
-            else
-            {
-                Console.WriteLine("--> [DIAGNOSTIC] Configuration values are missing!");
-            }
-        }
-    }
-    else
-    {
-        Console.WriteLine("--> [DIAGNOSTIC] Cannot connect to database.");
+        db.Users.Add(admin);
+        await db.SaveChangesAsync();
     }
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"--> [DIAGNOSTIC ERROR]: {ex.Message}");
+    Console.WriteLine($"Admin seeding failed: {ex.Message}");
 }
 
 
