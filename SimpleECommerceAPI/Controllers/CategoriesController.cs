@@ -21,6 +21,7 @@ namespace SimpleECommerceAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [HttpHead] // for UptimeRobot
         public async Task<ActionResult<List<CategoryResponseDto>>> GetAllCategories()
         {
             return Ok(await _categoryService.GetAllCategoriesAsync());
