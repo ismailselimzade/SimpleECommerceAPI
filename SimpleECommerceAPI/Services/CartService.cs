@@ -57,7 +57,7 @@ namespace SimpleECommerceAPI.Services
             {
                 if (product.Stock < cartItemAddDto.Quantity)
                 {
-                    throw new BadRequestException("Not enough stock available."); // və ya uyğun xəta
+                    throw new BadHttpRequestException("Not enough stock available."); // və ya uyğun xəta
                 }
 
                 Cart createdCart = new() { UserId = userId, CreatedAt = DateTime.UtcNow };
