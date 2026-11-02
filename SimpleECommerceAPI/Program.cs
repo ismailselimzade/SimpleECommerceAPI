@@ -108,5 +108,4 @@ catch (Exception ex)
 var secretKey = builder.Configuration["Stripe:SecretKey"];
 StripeConfiguration.ApiKey = secretKey;
 
-
 app.Run();

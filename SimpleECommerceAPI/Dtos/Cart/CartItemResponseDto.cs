@@ -2,6 +2,7 @@
 {
     public record CartItemResponseDto
     (
+        Guid Id,
         Guid CartId, 
         Guid ProductId, 
         string ProductName, 
