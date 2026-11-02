@@ -37,7 +37,10 @@ namespace SimpleECommerceAPI.Services
                 query = query.Where(p => p.Name.Contains(queryParameters.SearchTerm));
             }
 
+            query = query.OrderByDescending(p => p.CreatedAt);
+
             int totalCount = await query.CountAsync();
+
             query = query.Skip((queryParameters.Page - 1) * queryParameters.PageSize).Take(queryParameters.PageSize);
 
             var items = await query
@@ -55,7 +58,6 @@ namespace SimpleECommerceAPI.Services
                 PageSize = queryParameters.PageSize,
                 TotalCount = totalCount
             };
-
 
             return result;
         }
