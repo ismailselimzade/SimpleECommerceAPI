@@ -11,8 +11,12 @@ namespace SimpleECommerceAPI.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "simple_ecommerce_db");
+
             migrationBuilder.CreateTable(
                 name: "Categories",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -25,6 +29,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Users",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -41,6 +46,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Products",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -58,6 +64,7 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -65,6 +72,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Carts",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -77,6 +85,7 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_Carts_Users_UserId",
                         column: x => x.UserId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -84,6 +93,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Orders",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -99,6 +109,7 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -106,6 +117,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RefreshTokens",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -121,6 +133,7 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_RefreshTokens_Users_UserId",
                         column: x => x.UserId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -128,6 +141,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CartItems",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -141,12 +155,14 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_CartItems_Carts_CartId",
                         column: x => x.CartId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Carts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CartItems_Products_ProductId",
                         column: x => x.ProductId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -154,6 +170,7 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateTable(
                 name: "OrderItems",
+                schema: "simple_ecommerce_db",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -169,12 +186,14 @@ namespace SimpleECommerceAPI.Migrations
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
+                        principalSchema: "simple_ecommerce_db",
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -182,66 +201,78 @@ namespace SimpleECommerceAPI.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartId_ProductId",
+                schema: "simple_ecommerce_db",
                 table: "CartItems",
                 columns: new[] { "CartId", "ProductId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductId",
+                schema: "simple_ecommerce_db",
                 table: "CartItems",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_UserId",
+                schema: "simple_ecommerce_db",
                 table: "Carts",
                 column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
+                schema: "simple_ecommerce_db",
                 table: "Categories",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
+                schema: "simple_ecommerce_db",
                 table: "OrderItems",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_ProductId",
+                schema: "simple_ecommerce_db",
                 table: "OrderItems",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
+                schema: "simple_ecommerce_db",
                 table: "Orders",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
+                schema: "simple_ecommerce_db",
                 table: "Products",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_TokenHash",
+                schema: "simple_ecommerce_db",
                 table: "RefreshTokens",
                 column: "TokenHash",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
+                schema: "simple_ecommerce_db",
                 table: "RefreshTokens",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
+                schema: "simple_ecommerce_db",
                 table: "Users",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
+                schema: "simple_ecommerce_db",
                 table: "Users",
                 column: "Username",
                 unique: true);
@@ -251,28 +282,36 @@ namespace SimpleECommerceAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartItems");
+                name: "CartItems",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
+                name: "OrderItems",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "RefreshTokens");
+                name: "RefreshTokens",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "Carts");
+                name: "Carts",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Orders",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Products",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Users",
+                schema: "simple_ecommerce_db");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Categories",
+                schema: "simple_ecommerce_db");
         }
     }
 }

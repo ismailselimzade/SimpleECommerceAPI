@@ -21,7 +21,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "simple_ecommerce_db"));
 });
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();

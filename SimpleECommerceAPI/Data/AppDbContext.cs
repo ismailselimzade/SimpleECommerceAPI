@@ -21,6 +21,8 @@ namespace SimpleECommerceAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("simple_ecommerce_db");
+
             modelBuilder.Entity<Cart>()
                 .HasOne(cart => cart.User)
                 .WithOne(user => user.Cart)

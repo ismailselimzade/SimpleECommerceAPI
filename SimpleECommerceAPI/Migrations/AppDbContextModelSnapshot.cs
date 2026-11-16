@@ -17,6 +17,7 @@ namespace SimpleECommerceAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("simple_ecommerce_db")
                 .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -39,7 +40,7 @@ namespace SimpleECommerceAPI.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.CartItem", b =>
@@ -64,7 +65,7 @@ namespace SimpleECommerceAPI.Migrations
                     b.HasIndex("CartId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.Category", b =>
@@ -82,7 +83,7 @@ namespace SimpleECommerceAPI.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.Order", b =>
@@ -111,7 +112,7 @@ namespace SimpleECommerceAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.OrderItem", b =>
@@ -143,7 +144,7 @@ namespace SimpleECommerceAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.Product", b =>
@@ -181,7 +182,7 @@ namespace SimpleECommerceAPI.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.RefreshToken", b =>
@@ -213,7 +214,7 @@ namespace SimpleECommerceAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.User", b =>
@@ -248,7 +249,7 @@ namespace SimpleECommerceAPI.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", "simple_ecommerce_db");
                 });
 
             modelBuilder.Entity("SimpleECommerceAPI.Models.Cart", b =>
